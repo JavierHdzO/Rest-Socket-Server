@@ -55,6 +55,16 @@ const existsProductByID = async( id ) => {
 }
 
 
+const allowedCollections = ( collection = '', collections = []) => {
+
+    const include = collections.includes(collection);
+    if(!include){
+        throw new Error(`Try with allowed collections : {${collections}}`);
+    }
+
+    return true;
+}
+
 
 
 
@@ -62,6 +72,7 @@ const existsProductByID = async( id ) => {
 
 
 module.exports = {
+    allowedCollections,
     roleValidator,
     existsEmailValidator,
     existsUserByID,
