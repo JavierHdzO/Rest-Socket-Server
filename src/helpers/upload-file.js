@@ -41,7 +41,7 @@ const removeLocalFile = async( file, collection ) =>{
         throw new Error('File does not exist');
     }
 
-    const pathFile = path.join(__dirname, '../uploads', collection='imgs', file);
+    const pathFile = path.join(__dirname, '../uploads', collection='img', file);
 
     if(!fs.existsSync(pathFile)) throw new Error('File does not exist');
 
@@ -55,9 +55,8 @@ const uploadClouinaryFile = async( filePath )=>{
         throw new Error('File does not exist');
 
     try{
-        console.log("aqui x5");
-       const res =  await cloduinary.uploader.upload(filePath);
-       return res;
+       const { secure_url } =  await cloduinary.uploader.upload(filePath);
+       return secure_url;
     }catch(error){
         console.log(error);
         throw new Error(error);
@@ -86,7 +85,7 @@ const removeCloudinaryFile = async( secure_url = undefined )=>{
 
 module.exports = {
     uploadLocalFile,
-    removeLocalFile,
+    removeLocalFile,    
     uploadClouinaryFile,
     removeCloudinaryFile
 }

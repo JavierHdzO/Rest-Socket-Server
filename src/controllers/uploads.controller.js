@@ -75,13 +75,14 @@ const updateFile = async(req, res =  response) =>{
                 });
         }
 
-        if(model.img){
+        if(model.img && model.img !== ''){
             await removeCloudinaryFile( model.img );
+            model.img = '';
         }
 
-        const { uploadPath } = await uploadLocalFile( req.files, undefined, undefined );
+        const { temporalName, uploadPath } = await uploadLocalFile( req.files, undefined, undefined );
         const url = await uploadClouinaryFile( uploadPath );
-        
+        removeLocalFile(temporalName, undefined);
         model.img = url;
 
         await model.save();
