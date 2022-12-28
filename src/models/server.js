@@ -54,7 +54,11 @@ class Server {
         this.app.use( express.static( path.join('src','public' )));
 
         // File upload
-        this.app.use( fileupload());
+        this.app.use( fileupload({
+            useTempFiles: true,
+            tempFileDir: path.join(__dirname, "../uploads"),
+            createParentPath: true
+        }));
     }
 
     routes(){
