@@ -9,7 +9,7 @@ const dbConnection = async () => {
         console.log('Database is connected');
         
     } catch (error) {
-        throw new Error('Error to start db');
+        throw new Error('Error to start Database conneection');
     }
 
 
