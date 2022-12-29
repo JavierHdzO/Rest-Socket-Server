@@ -111,7 +111,22 @@ const googleSignIn = async( req , res ) => {
 
 }
 
+
+const validatorJWT = ( req, res) => {
+
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false, 
+            msg:'Report the problem to the admin'
+        });
+    }
+}
+
 module.exports = {
+    validatorJWT,
     login,
     googleSignIn
 }

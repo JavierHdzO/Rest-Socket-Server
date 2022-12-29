@@ -42,8 +42,6 @@ function handleCredentialResponse(response) {
             formData[element.name] =  element.value
      }
 
-     console.log( formData );
-
     fetch(url+'login', {
         method: 'POST',
         headers:{
@@ -52,8 +50,15 @@ function handleCredentialResponse(response) {
         body: JSON.stringify(formData)
     })
     .then( resp => resp.json() )
-    .then( ({ token })=>{
+    .then( ({ok, msg, data })=>{
+        
+        if(!ok){
+            console.error(msg);
+            return;
+        }
+        const { token } = data;
         localStorage.setItem('token', token);
+        
     })
     .catch( console.log );
  });
