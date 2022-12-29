@@ -24,7 +24,7 @@ router.post('/google',[
 
 router.get('/', [
     validateJwt
-], validatorJWT)
+], validatorJWT);
 
 
 

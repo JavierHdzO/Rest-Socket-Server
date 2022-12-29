@@ -23,6 +23,7 @@ function handleCredentialResponse(response) {
             //  console.log(resp);
             //  localStorage.setItem('email', resp.user.email);
              localStorage.setItem('token', token);
+             window.location = 'chat.html';
              // location.reload();
              // location.assign('chat.html');
 
@@ -58,6 +59,7 @@ function handleCredentialResponse(response) {
         }
         const { token } = data;
         localStorage.setItem('token', token);
+        window.location = 'chat.html';
         
     })
     .catch( console.log );
