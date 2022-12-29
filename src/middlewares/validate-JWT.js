@@ -7,6 +7,7 @@ const validateJwt = async ( req = request, res, next) => {
 
     const token = req.header('x-token');
     if( !token ) return res.status(401).json({
+        ok: false,
         msg: "Token missing or incorrect"
     });
     
@@ -17,12 +18,14 @@ const validateJwt = async ( req = request, res, next) => {
         const authUser = await User.findById(uid);
 
         if( !authUser ) return res.status(401).json({ 
+            ok: false,
             msg: "Token missing or incorrect"
         });
 
         /** was user deleted (status:false)?  */
 
-        if (!authUser.status) res.status(401).json({ 
+        if (!authUser.status) res.status(401).json({
+            ok: false,
             msg: "Token missing or incorrect" 
         });
 
