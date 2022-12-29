@@ -111,7 +111,34 @@ const googleSignIn = async( req , res ) => {
 
 }
 
+
+const validatorJWT = async( req, res) => {
+
+    
+    const token = req.header('x-token');
+    try {
+        const refresh_Token = await generateJWT(req.uid);
+        
+        res.json({
+            ok: true,
+            data:{
+                user: req.authUser,
+                refresh_Token,
+                token
+            }
+        });
+
+    } catch (error) {
+       console.log(error);
+       res.status(500).json({
+        ok:false,
+        msg:'Report the problem to the admin'
+       });
+    }
+}
+
 module.exports = {
+    validatorJWT,
     login,
     googleSignIn
 }
