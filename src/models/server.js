@@ -1,16 +1,21 @@
 const path = require('path');
+const { createServer } = require('http');
 
-const express  = require('express');
-const cors = require('cors');
+const express   = require('express');
+const { Server }= require('socket.io');
+const cors      = require('cors');
 const fileupload = require('express-fileupload');
 
 const dbConnection = require('./../database/config');
+const { socketController } = require('../sockets');
 
 
-class Server {
+class Serve {
 
     constructor(){
-        this.app = express(); 
+        this.app = express();
+        this.httpServer = createServer(this.app);
+        this.io = new Server(this.httpServer, {});
         this.port = process.env.PORT;
 
         //Paths
@@ -23,9 +28,6 @@ class Server {
             uploads:     '/api/uploads'
         }
 
-        
-
-
         // DB connectio
         this.connectDB();
 
@@ -35,6 +37,8 @@ class Server {
         //Routes
         this.routes();
 
+        //sockets
+        this.sockets();
     }
 
     async connectDB () {
@@ -70,13 +74,16 @@ class Server {
         this.app.use(this.paths.uploads, require('../routes/uploads.routes'));
     }
 
+    sockets(){
+        this.io.on('connection', socketController);
+    }
 
     listen(){
-        this.app.listen( this.port, () => {
+        this.httpServer.listen( this.port, () => {
             console.log(`Server on port ${ this.port }`);
         });
     }
     
 }
 
-module.exports = Server;
+module.exports = Serve;
