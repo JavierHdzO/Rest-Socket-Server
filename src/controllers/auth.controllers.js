@@ -1,6 +1,4 @@
 
-const { request, response, json } = require('express');
-
 const User = require('../models/usuario');
 const { generateJWT } = require('../helpers/generateJWT');
 
@@ -8,7 +6,7 @@ const { googleVerify } =  require('../helpers/google-verify');
 
 
 
-const login = async ( req, res =  response ) =>{
+const login = async ( req, res ) =>{
 
     const { email, password } = req.body;
     
@@ -18,16 +16,16 @@ const login = async ( req, res =  response ) =>{
 
         const user = await User.findOne( { email } );
 
-        if ( !user ) return res.status(400).json({msg:'Incorrect username or password - email'})
+        if ( !user ) return res.status(400).json({ ok: false, msg:'Incorrect username or password - email'})
         // must verify if user still exists
 
-        if( !user.status ) return res.status(400).json({ msg:'Incorrect username or password - status' });
+        if( !user.status ) return res.status(400).json({ ok: false, msg:'Incorrect username or password - status' });
         
         // must verify if paassword is correct
         
         const existsPassword = await user.comparePassword(password);
 
-        if( !existsPassword ) return res.status(400).json({ msg:'Incorrect username or password - password' });
+        if( !existsPassword ) return res.status(400).json({ ok: false, msg:'Incorrect username or password - password' });
         
         // Generate JWT
 
@@ -35,8 +33,11 @@ const login = async ( req, res =  response ) =>{
 
 
         res.json({
-            user,
-            token
+            ok: true,
+            data:{
+                user,
+                token
+            }
         });
         
     } catch (error) {
@@ -53,7 +54,7 @@ const login = async ( req, res =  response ) =>{
 }
 
 
-const googleSignIn = async( req = request, res =  response) => {
+const googleSignIn = async( req , res ) => {
     const { idToken } = req.body;
     
     try {
@@ -93,9 +94,11 @@ const googleSignIn = async( req = request, res =  response) => {
 
 
         res.json({
-            user,
-            token,
-            msg:'ok'
+            ok: true,
+            data:{
+                user,
+                token
+            }
         })
 
     } catch (error) {
