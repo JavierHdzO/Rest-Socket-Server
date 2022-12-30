@@ -5,6 +5,15 @@ const url = ( window.location.hostname.includes('localhost'))
 let user = null;
 let socket = null;
 
+
+// References HTML
+
+const txtUid = document.getElementById('txtUid') ;
+const txtMessage = document.getElementById('txtMessage');
+const ulUsers = document.getElementById('ulUsers');
+const ulMessages = document.getElementById('ulMessages')
+const btnLogOut = document.getElementById('btnLogOut');
+
 const validateJWT = async() => {
 
     const token = localStorage.getItem('token');
@@ -24,17 +33,29 @@ const validateJWT = async() => {
 
     const { data, ok, msg } = await resp.json();
 
-    if( !ok ){
+    if( !ok && msg.length > 0){
+        console.log('paso la validacion');
         localStorage.removeItem('token');
         window.location = 'index.html';
         console.error(msg);
-        return false;
     }
 
     const { user: usr , token: old_Token, refresh_token } = data;
     localStorage.setItem('token', refresh_token);
     user = usr;
+    document.title = user.name;
+
+    await connectSocket();
     return true;
+}
+
+
+const connectSocket = () => {
+    socket = io({
+        'extraHeaders':{
+            'x-token':localStorage.getItem('token')
+        }
+    });
 }
 
 
@@ -45,16 +66,5 @@ const main = async() => {
 
 
 main();
- socket = io();
+ 
 
-socket.on('connect', () => {
-    console.log("connected");
-});
-
-socket.on('disconnect', () => {
-    console.log("connected");
-});
-
-socket.on('message', ( payload ) => {
-    console.log(payload);
-});

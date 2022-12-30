@@ -117,13 +117,13 @@ const validatorJWT = async( req, res) => {
     
     const token = req.header('x-token');
     try {
-        const refresh_Token = await generateJWT(req.uid);
+        const refresh_token = await generateJWT(req.uid);
         
         res.json({
             ok: true,
             data:{
                 user: req.authUser,
-                refresh_Token,
+                refresh_token,
                 token
             }
         });
