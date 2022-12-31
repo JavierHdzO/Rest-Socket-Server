@@ -78,8 +78,9 @@ const connectSocket = () => {
         drawUsers(users);
     });
 
-    socket.on('private message', () => {
+    socket.on('private-message', ( payload ) => {
         // Todo
+        console.log('private message',payload );
     });
 
 

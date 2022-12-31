@@ -15,6 +15,10 @@ const socketController = async( socket, io ) => {
     console.log(`${ user.name } is connected`);
     messageChat.connectUser( user );
 
+    // Connect user to specific room
+
+    socket.join( user.id );
+
     /** Emits */
     io.emit('users-on', messageChat.usersOn);
     io.emit('recieve-message', messageChat.LastMessages );
@@ -27,8 +31,12 @@ const socketController = async( socket, io ) => {
 
     socket.on('send-message', ( { message, uid } ) => {
 
-        messageChat.sendMessage( user._id, user.name, message );
-        io.emit('recieve-message', messageChat.LastMessages );
+        if( uid ){
+            socket.to( uid ).emit('private-message',{from: user.name, message});
+        }else{
+            messageChat.sendMessage( user._id, user.name, message );
+            io.emit('recieve-message', messageChat.LastMessages );
+        }
     });
 
 }
