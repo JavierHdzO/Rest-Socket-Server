@@ -17,11 +17,18 @@ const socketController = async( socket, io ) => {
 
     /** Emits */
     io.emit('users-on', messageChat.usersOn);
+    io.emit('recieve-message', messageChat.LastMessages );
 
     /** Listen */
     socket.on('disconnect', ( )=>{
         messageChat.disconnectUser( user._id );
         io.emit('users-on', messageChat.usersOn);
+    });
+
+    socket.on('send-message', ( { message, uid } ) => {
+
+        messageChat.sendMessage( user._id, user.name, message );
+        io.emit('recieve-message', messageChat.LastMessages );
     });
 
 }

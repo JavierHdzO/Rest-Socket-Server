@@ -17,7 +17,8 @@ class MessageChat{
     }
 
     get LastMessages(){
-        return this.messages.splice(0,10);
+        this.messages = this.messages.splice(0,10);;
+        return this.messages;
     }
 
     get usersOn(){

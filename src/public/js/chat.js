@@ -51,7 +51,7 @@ const validateJWT = async() => {
     return true;
 }
 
-// Emit and Listen sockets
+// Emit and Listeners socket
 const connectSocket = () => {
     socket = io({
         'extraHeaders':{
@@ -67,13 +67,14 @@ const connectSocket = () => {
         console.log('User Offline');
     });
 
-    socket.on('recieve-message', () => {
+    socket.on('recieve-message', ( payload ) => {
         // Todo
+        drawMessages(payload);
     });
 
     socket.on('users-on', ( users ) => {
         // Todo
-        
+
         drawUsers(users);
     });
 
@@ -106,7 +107,51 @@ const drawUsers = ( users ) => {
     });
 }
 
+const drawMessages = ( messages ) => {
 
+    ulMessages.replaceChildren([]);
+    messages.forEach( ({ message, name, uid }) => {
+
+       const li = document.createElement('li');
+       const spanName = document.createElement('h5');
+       const span = document.createElement('span');
+
+       spanName.classList.add('text-primary');
+       spanName.textContent = name + ' ';
+       
+    //    span.classList.add('fs-6');
+    //    span.classList.add('text-muted');
+       span.textContent = message;
+
+       li.appendChild(spanName);
+       li.appendChild(span);
+       
+       ulMessages.appendChild(li);
+    });
+}
+
+//  Listeners
+
+txtMessage.addEventListener('keyup', ( event ) => {
+    const { key } = event;
+
+    const message = txtMessage.value;
+    const uid     = txtUid.value;
+
+    if( ( message.trim() === '' || uid.trim() === '') || key !== 'Enter' ) return;
+
+    socket.emit('send-message', {
+        message: txtMessage.value,
+        uid: txtUid.value
+    });
+
+    txtMessage.value = '';
+    txtUid.value = '';
+
+});
+
+
+//  Main
 const main = async() => {
 
    await validateJWT(); 
