@@ -56,6 +56,28 @@ const connectSocket = () => {
             'x-token':localStorage.getItem('token')
         }
     });
+
+    socket.on('connect', () => {
+        console.log('User connected');
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User Offline');
+    });
+
+    socket.on('recieve-message', () => {
+        // Todo
+    });
+
+    socket.on('users-on', () => {
+        // Todo
+    });
+
+    socket.on('private message', () => {
+        // Todo
+    });
+
+
 }
 
 
