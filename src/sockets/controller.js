@@ -15,12 +15,15 @@ const socketController = async( socket, io ) => {
     console.log(`${ user.name } is connected`);
     messageChat.connectUser( user );
 
+    /** Emits */
+    io.emit('users-on', messageChat.usersOn);
+
+    /** Listen */
     socket.on('disconnect', ( )=>{
         messageChat.disconnectUser( user._id );
         io.emit('users-on', messageChat.usersOn);
     });
 
-    io.emit('users-on', messageChat.usersOn);
 }
 
 module.exports = {

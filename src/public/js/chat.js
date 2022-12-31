@@ -14,6 +14,8 @@ const ulUsers = document.getElementById('ulUsers');
 const ulMessages = document.getElementById('ulMessages')
 const btnLogOut = document.getElementById('btnLogOut');
 
+
+//Validate JWT for connecting to socket
 const validateJWT = async() => {
 
     const token = localStorage.getItem('token');
@@ -49,7 +51,7 @@ const validateJWT = async() => {
     return true;
 }
 
-
+// Emit and Listen sockets
 const connectSocket = () => {
     socket = io({
         'extraHeaders':{
@@ -71,7 +73,8 @@ const connectSocket = () => {
 
     socket.on('users-on', ( users ) => {
         // Todo
-        console.log( users );
+        
+        drawUsers(users);
     });
 
     socket.on('private message', () => {
@@ -79,6 +82,28 @@ const connectSocket = () => {
     });
 
 
+}
+
+const drawUsers = ( users ) => {
+
+    ulUsers.replaceChildren([]);
+    users.forEach( user => {
+       const li = document.createElement('li');
+       const h5 = document.createElement('h5');
+       const span = document.createElement('span');
+
+       h5.classList.add('text-success');
+       h5.textContent = user.name;
+       
+       span.classList.add('fs-6');
+       span.classList.add('text-muted');
+       span.textContent = user.uid;
+
+       li.appendChild(h5);
+       li.appendChild(span);
+       
+       ulUsers.appendChild(li);
+    });
 }
 
 
