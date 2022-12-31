@@ -69,8 +69,9 @@ const connectSocket = () => {
         // Todo
     });
 
-    socket.on('users-on', () => {
+    socket.on('users-on', ( users ) => {
         // Todo
+        console.log( users );
     });
 
     socket.on('private message', () => {

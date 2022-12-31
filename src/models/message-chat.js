@@ -20,7 +20,7 @@ class MessageChat{
         return this.messages.splice(0,10);
     }
 
-    get onUsers(){
+    get usersOn(){
         return Object.values(this.users);
     }
 
@@ -29,11 +29,11 @@ class MessageChat{
         this.messages.unshift(new Message(uid, name, message));
     }
 
-    addUser(user){
+    connectUser(user){
         this.users[user.id] = user;
     }
 
-    userDisconnect( uid ){
+    disconnectUser( uid ){
         delete this.users[ uid ];
     }
 }
